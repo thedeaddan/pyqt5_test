@@ -1,4 +1,4 @@
 # pyqt5_test
 Тестовый проект с граф.интерфейсом  
 ***
-![image](https://user-images.githubusercontent.com/40400854/168813742-9a8a7438-4721-4b9b-a336-d7db418fa69a.png)
+![image](https://user-images.githubusercontent.com/40400854/168834145-62da0caf-e791-4193-ad40-a1aa3c45d7d5.png)
