@@ -4,9 +4,12 @@ from window import Ui_MainWindow
 import sys
 
 global choice,button_choice
+global result
 global integer
 choice = "Да"
 button_choice = "В квадрат"
+result = ""
+
 
 class mywindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -15,7 +18,10 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.ui.pushButton.clicked.connect(self.quote)
         self.ui.pushButton_2.clicked.connect(self.clear)
-        self.ui.pushButton_3.clicked.connect(self.degree)
+        result = self.ui.pushButton_3.clicked.connect(self.degree)
+        self.ui.pushButton_4.clicked.connect(self.save)
+        self.ui.pushButton_5.clicked.connect(self.returns)
+        self.ui.pushButton_6.clicked.connect(self.exit)
         self.ui.comboBox.addItems(["Да","Нет"])
         self.ui.comboBox.activated[str].connect(self.onActivated)
 
@@ -26,6 +32,8 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.radioButton.setChecked(True)
         self.button_group.buttonClicked.connect(self.radioButton_edit)
 
+    def exit(self):
+        sys.exit(0)
 
     def radioButton_edit(self,button):
         text = button.text()
@@ -51,6 +59,13 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.lineEdit_2.clear()
         self.ui.lineEdit_3.clear()
         self.ui.lineEdit_4.clear()
+    def returns(self):
+        self.ui.radioButton.setChecked(True)
+        self.ui.lineEdit.clear()
+        self.ui.lineEdit_2.clear()
+        self.ui.lineEdit_3.clear()
+        self.ui.lineEdit_4.clear()
+        QMessageBox.critical(self, "Подтверждение", "Введите данные заново..", QMessageBox.Ok)
 
     def quote(self):
         global integer
@@ -88,21 +103,39 @@ class mywindow(QtWidgets.QMainWindow):
             integer = integer.replace(",",".")
             self.ui.lineEdit.setText(integer)
         try:
+            global result
             if integer != "":
                 integer = float(integer)
                 if button_choice == "В квадрат":
                     self.ui.lineEdit_4.setText(str(round(integer**2,3)))
+                    result = round(integer**2,3)
                 elif button_choice == "В куб":
                     self.ui.lineEdit_4.setText(str(round(integer**3,3)))
+                    result = round(integer**3,3)
                 elif button_choice == "Не надо":
                     self.ui.lineEdit_4.setText(str(integer))
+                    result = integer
             else:
                 self.ui.lineEdit_4.setText("Вы ещё не ввели число")
         except:
             self.ui.lineEdit_4.setText(f"Ошибка! {integer} - не число")
 
 
-
+    def save(self):
+        f = open('result.txt','a')
+        if result != "":
+            integer = str(self.ui.lineEdit.text())
+            if integer != "":
+                    if button_choice != "Не надо":
+                        line = f"При возведении {integer} {button_choice} получилось {result}\n"
+                    else:
+                        line = f"Программа ничего не сделала и получила {result}\n"
+                    f.write(line)
+                    f.close()
+            else:
+                self.ui.lineEdit_4.setText("Введите исходное число")
+        else:
+            self.ui.lineEdit_4.setText("Нажмите кнопку ответ")
 
 
 
