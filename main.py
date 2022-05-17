@@ -4,6 +4,7 @@ from window import Ui_MainWindow
 import sys
 
 global choice,button_choice
+global integer
 choice = "Да"
 button_choice = "В квадрат"
 
@@ -14,6 +15,7 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.ui.pushButton.clicked.connect(self.quote)
         self.ui.pushButton_2.clicked.connect(self.clear)
+        self.ui.pushButton_3.clicked.connect(self.degree)
         self.ui.comboBox.addItems(["Да","Нет"])
         self.ui.comboBox.activated[str].connect(self.onActivated)
 
@@ -24,6 +26,7 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.radioButton.setChecked(True)
         self.button_group.buttonClicked.connect(self.radioButton_edit)
 
+
     def radioButton_edit(self,button):
         text = button.text()
         global button_choice
@@ -33,7 +36,7 @@ class mywindow(QtWidgets.QMainWindow):
             button_choice = text
         elif text == "В квадрат":
             button_choice = text
-        print(button_choice)
+
 
     def onActivated(self,text):
         global choice
@@ -50,6 +53,7 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.lineEdit_4.clear()
 
     def quote(self):
+        global integer
         quote_max = self.ui.lineEdit_3
         integer = str(self.ui.lineEdit.text())
         name = str(self.ui.lineEdit_2.text())
@@ -64,6 +68,7 @@ class mywindow(QtWidgets.QMainWindow):
                     integer = integer.replace(",",".")
                     self.ui.lineEdit.setText(integer)
                 integer = float(integer)
+                integer = str(integer)[:-2]
                 if choice == "Нет":
                     if name == "":
                         quote_max.setText(f"Ладно Безымянный, не запомню число, но там {integer}")
@@ -77,6 +82,24 @@ class mywindow(QtWidgets.QMainWindow):
             except:
                 quote_max.setText(f"Ошибка! {integer} - не число")
 
+    def degree(self):
+        integer = str(self.ui.lineEdit.text())
+        if "," in integer:
+            integer = integer.replace(",",".")
+            self.ui.lineEdit.setText(integer)
+        try:
+            if integer != "":
+                integer = float(integer)
+                if button_choice == "В квадрат":
+                    self.ui.lineEdit_4.setText(str(round(integer**2,3)))
+                elif button_choice == "В куб":
+                    self.ui.lineEdit_4.setText(str(round(integer**3,3)))
+                elif button_choice == "Не надо":
+                    self.ui.lineEdit_4.setText(str(integer))
+            else:
+                self.ui.lineEdit_4.setText("Вы ещё не ввели число")
+        except:
+            self.ui.lineEdit_4.setText(f"Ошибка! {integer} - не число")
 
 
 
